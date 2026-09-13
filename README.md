@@ -125,7 +125,7 @@ All endpoints are covered by automated tests in `tests/test_app.py` using `pytes
 
 ### Run tests in one command:
 ```bash
-pytest -v
+python -m pytest -v
 ```
 
 ### What the test suite verifies:
@@ -297,21 +297,8 @@ The pipeline includes `post { always { ... } }` to ensure any running test conta
 
 ---
 
-## 9. Demonstration Structure (5-Minute Walkthrough)
 
-When presenting this project, follow this 1-minute-per-topic breakdown:
-
-| Time | Topic | Demonstration Steps |
-| :--- | :--- | :--- |
-| **Minute 1** | **Problem & Repository Structure** | • Explain the scenario: lightweight health dashboard API for SRE monitoring.<br>• Walk through the repository files (`app.py`, `tests/`, `Dockerfile`, `Jenkinsfile`, `README.md`). |
-| **Minute 2** | **Git Workflow & Merge Conflict** | • Show `git log --graph --oneline --all`.<br>• Point out `main`, `develop`, feature branches, the controlled conflict, and the merge resolution. |
-| **Minute 3** | **Automated Tests & Intentional Failure** | • Run `pytest -v` in terminal to show all tests passing.<br>• Show how altering a test expectation causes `pytest` to fail and explain how this protects the pipeline. |
-| **Minute 4** | **Docker & Environment Configuration** | • Show `Dockerfile` and `.dockerignore`.<br>• Run the container with `-e APP_ENV=staging` and query `/environment` to prove it is dynamic. |
-| **Minute 5** | **Jenkins Pipeline & Key Learning** | • Walk through the 6 stages in `Jenkinsfile`.<br>• Highlight the build-number tagging and container health-check stage.<br>• Summarize key learning on conflict resolution and pipeline gates. |
-
----
-
-## 10. Individual Reflection
+## 9. Individual Reflection
 
 ### 1. Which Git practice most improved the way you organised your work?
 Using short-lived feature branches (`feature/<description>`) separated from `develop` kept unfinished work isolated. It allowed each endpoint and its unit tests to be developed and tested independently before touching the shared integration branch. Having atomic, action-oriented commit messages also made tracing the changes during conflict resolution trivial.
