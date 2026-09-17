@@ -20,7 +20,7 @@ pipeline {
         stage('Install') {
             steps {
                 echo 'Installing application and test dependencies...'
-                sh '''
+                bat '''
                     python3 -m pip install --upgrade pip
                     pip install -r requirements.txt
                 '''
@@ -31,21 +31,21 @@ pipeline {
             steps {
                 echo 'Running automated test suite with pytest...'
                 // If any test fails, pytest exits with non-zero code, stopping the pipeline
-                sh 'pytest -v tests/'
+                bat 'pytest -v tests/'
             }
         }
 
         stage('Build') {
             steps {
                 echo "Building Docker image: ${IMAGE_TAG}..."
-                sh "docker build -t ${IMAGE_TAG} ."
+                bat "docker build -t ${IMAGE_TAG} ."
             }
         }
 
         stage('Tag') {
             steps {
                 echo "Tagging Docker image with build number and latest..."
-                sh """
+                bat """
                     docker tag ${IMAGE_TAG} ${APP_NAME}:latest
                     docker images | grep ${APP_NAME}
                 """
@@ -55,7 +55,7 @@ pipeline {
         stage('Health check') {
             steps {
                 echo 'Running container and verifying /health endpoint...'
-                sh """
+                bat """
                     docker run -d --name ${CONTAINER_NAME} -p ${HOST_PORT}:${CONTAINER_PORT} -e APP_ENV=test ${IMAGE_TAG}
                     sleep 3
                     curl --fail --retry 3 --retry-delay 2 http://localhost:${HOST_PORT}/health
@@ -67,7 +67,7 @@ pipeline {
     post {
         always {
             echo 'Cleaning up temporary health-check container...'
-            sh "docker rm -f ${CONTAINER_NAME} || true"
+            bat "docker rm -f ${CONTAINER_NAME} || true"
         }
         success {
             echo "Pipeline passed successfully! Image ${IMAGE_TAG} built, tagged, and verified."
